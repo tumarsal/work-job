@@ -4,18 +4,27 @@ info:
   version: '1.0'
 servers:
   - url: https://api.server.test/v1
+#POST api/account/login - логин
+#POST api/account/logout - логоут
+#POST api/account - регистрация
+#GET api/account - получение информации о текущем мользоватлеле
+#PUT api/account - редактирование данных текущего пользователя
+#OST api/account/restore - востановление пароля (запрос на востановление)
+#PUT api/account/restore - изменение пароля
+#GET api/article - получение статей
+#GET api/artiles/:id получение конкретной статьи
 paths:
-  /:
-    get:
+  /account/login:
+    post:
       responses:
         '200':
           description: OK
-  /test:
-    get:
+  /account/logout:
+    post:
       responses:
         '200':
           description: OK
-  /mytest:
+  /account:
     get:
       responses:
         '200':
@@ -26,11 +35,75 @@ paths:
                 type: array
                 items: 
                   $ref: '#/components/schemas/User'
+    put:
+      responses:
+        '200':
+          description: OK
+    post:
+      responses:
+        '200':
+          description: OK
+  /api/account/restore:
+    post:
+      responses:
+        '200':
+          description: OK
+    put:
+      responses:
+        '200':
+          description: OK
+  /article: 
+    get:
+      responses:
+        '200':
+          description: OK
+  /article/{id}:
+    get:
+      parameters:
+        - in: path
+          description: my descr
+          name: id
+          required: true
+          schema: 
+            type: integer
+      responses:
+        '200':
+          description: OK
 components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    # Schema for error response body
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
     User:
+      type: object
       properties:
         id:
           type: integer
-        name:
+          description: The user ID.
+        username:
           type: string
+          description: The user name.
+    IntValue:
+      type: integer
+
