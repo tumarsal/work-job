@@ -1,0 +1,36 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /:
+    get:
+      responses:
+        '200':
+          description: OK
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+  /mytest:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
