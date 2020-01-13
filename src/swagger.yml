@@ -3,7 +3,7 @@ info:
   title: API Title
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: http://localhost:3000/
 #POST api/account/login - логин
 #POST api/account/logout - логоут
 #POST api/account - регистрация
@@ -16,16 +16,33 @@ servers:
 paths:
   /account/login:
     post:
+      tags:
+        - Account 
+      requestBody:
+        content:
+          application/json: 
+            schema: 
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
           description: OK
+          content:
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/LoginResponse"
+        '404':
+          $ref: '#/components/responses/NotFound'
   /account/logout:
     post:
+      tags:
+        - Account 
       responses:
         '200':
           description: OK
   /account:
     get:
+      tags:
+        - Account 
       responses:
         '200':
           description: OK
@@ -36,32 +53,70 @@ paths:
                 items: 
                   $ref: '#/components/schemas/User'
     put:
+      tags:
+        - Account 
+      requestBody:
+        content:
+          application/json: 
+            schema: 
+              $ref: '#/components/schemas/User'
       responses:
         '200':
           description: OK
     post:
+      tags:
+        - Account 
       responses:
         '200':
           description: OK
   /api/account/restore:
     post:
+      tags:
+        - Account 
+      requestBody:
+        content:
+          application/json: 
+            schema: 
+              $ref: '#/components/schemas/RestoreRequest'
       responses:
         '200':
           description: OK
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/RestoreRespose'
+
     put:
+      tags:
+        - Account 
+      requestBody:
+        content:
+          application/json: 
+            schema: 
+              $ref: '#/components/schemas/RestoreCodeRequest'
       responses:
         '200':
           description: OK
+        '400':
+            description: Not found
   /article: 
     get:
+      tags:
+        - Article 
       responses:
         '200':
           description: OK
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/ArrayOfArticle'
   /article/{id}:
     get:
+      tags:
+        - Article
       parameters:
         - in: path
-          description: my descr
+          description: article id
           name: id
           required: true
           schema: 
@@ -69,6 +124,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/Article'
 components:
   responses:
     NotFound:
@@ -101,9 +160,74 @@ components:
         id:
           type: integer
           description: The user ID.
-        username:
+        name:
           type: string
           description: The user name.
+        last_name:
+          type: string
+          description: The user name.
+    ArrayOfArticle:
+      type: array
+      items:
+        $ref : '#/components/schemas/Article'
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The artile ID.
+        title:
+          type: string
+          description: Article title.
+        text: 
+          type: string
+          description: article text
+        readed: 
+          type: boolean
+          description: article is readed or not
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password: 
+          type: string
+    LoginResponse:
+      type: object
+      properties: 
+        token: 
+          type: string
+    RegisterRequest:
+      properties:
+        email: 
+          type: string
+        name:
+          type: string
+        last_name:
+          type: string
+        password: 
+          type: string
+        
+    RestoreRequest:
+      type: object
+      properties: 
+        email: 
+          type: string
+    RestoreRespose:
+      type: object
+      properties:
+        restore_token:
+          type: string
+
+    RestoreCodeRequest:
+      type: object
+      properties: 
+        restore_token: 
+          type: string
+        password: 
+          type: string
+          description: New password
+        
     IntValue:
       type: integer
 

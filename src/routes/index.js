@@ -14,7 +14,7 @@ router.get('/json', (req, res, next) => {
 
 //POST account/login - логин
 router.post('/account/login',function(req, res, next) {
-  let {phone, password} = req.body
+  let {email, password} = req.body
   
   res.json({ title: 'Express JSON' });
 })
@@ -26,7 +26,7 @@ router.post('/account/logout',function(req, res, next) {
 })
 //POST account - регистрация
 router.post('/account',function(req, res, next) {
-  let { phone,name,last_name,password} = req.body;
+  let { email,name,last_name,password} = req.body;
 
   res.json({ title: 'Express JSON' });
 })
